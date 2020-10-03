@@ -34,8 +34,6 @@ const App = props => {
         ) : (null);
     });
 
-    console.log('[props]', props);
-
     useEffect(() => {
         const updateUser = async (authState) => {
             try {
@@ -50,11 +48,6 @@ const App = props => {
         updateUser(); // check manually the first time because we won't get a Hub event
         return () => Hub.remove('auth', updateUser); // cleanup
     }, []);
-
-    useEffect(() => {
-        console.log('[user]', user);
-        console.log('[user]', menu);
-    }, [user, menu]);
 
     return (
         <CognitoAuthUserContext.Provider value={user}>
