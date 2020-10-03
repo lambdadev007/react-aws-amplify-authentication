@@ -9,6 +9,10 @@ import * as serviceWorker from './serviceWorker';
 import reducer from './store/reducer';
 import config from './config';
 
+import Amplify from "aws-amplify";
+import awsExports from "./aws-exports";
+Amplify.configure(awsExports);
+
 const store = createStore(reducer);
 
 const app = (

@@ -88,6 +88,7 @@ class AdminLayout extends Component {
 const mapStateToProps = state => {
     return {
         defaultPath: state.defaultPath,
+        defaultAuthPath: state.defaultAuthPath,
         isFullScreen: state.isFullScreen,
         collapseMenu: state.collapseMenu,
         configBlock: state.configBlock,

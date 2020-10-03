@@ -3,7 +3,6 @@ import { Row, Col, Card } from 'react-bootstrap';
 
 import Aux from "../../../hoc/_Aux";
 
-
 class Dashboard extends React.Component {
     render() {
         return (

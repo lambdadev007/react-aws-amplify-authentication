@@ -1,5 +1,6 @@
 export default {
-    defaultPath: '/auth/login',
+    defaultAuthPath: '/auth/login',
+    defaultPath: '/dashboard',
     basename: '/', // only at build time to set, like /datta-able
     layout: 'vertical', // vertical, horizontal (not available in lite version)
     preLayout: null, // (not available in lite version)
