@@ -93,7 +93,7 @@ const NavRight = props => {
                             <div className="pro-head">
                                 <img src={Avatar1} className="img-radius" alt="User Profile"/>
                                 <span>{user.attributes.given_name} {user.attributes.family_name}</span>
-                                <a href={DEMO.BLANK_LINK} className="dud-logout" title="Logout">
+                                <a href={DEMO.BLANK_LINK} className="dud-logout" onClick={e => logOut(e)} title="Logout">
                                     <i className="feather icon-log-out"/>
                                 </a>
                             </div>

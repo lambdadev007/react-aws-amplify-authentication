@@ -53,7 +53,8 @@ const App = props => {
 
     useEffect(() => {
         console.log('[user]', user);
-    }, [user]);
+        console.log('[user]', menu);
+    }, [user, menu]);
 
     return (
         <CognitoAuthUserContext.Provider value={user}>

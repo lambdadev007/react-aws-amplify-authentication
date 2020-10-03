@@ -71,6 +71,7 @@ class AdminLayout extends Component {
                                                 <Switch>
                                                     {menu}
                                                     <Redirect from="/" to={this.props.defaultPath} />
+                                                    {/* <Redirect from="/auth/register" to={this.props.defaultPath} /> */}
                                                 </Switch>
                                             </Suspense>
                                         </div>

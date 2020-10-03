@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import {NavLink} from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 import "./../../../../assets/scss/style.scss";
-import Aux from "./../../../../hoc/_Aux";
+import AuthAux from "./../../../../hoc/_Aux/auth";
 import Breadcrumb from "../../../layout/AdminLayout/Breadcrumb";
 import DEMO from "../../../../store/constant";
 
@@ -81,7 +81,7 @@ const SignUp = () => {
     }, [willInit]);
 
     return(
-        <Aux>
+        <AuthAux>
             <Breadcrumb/>
             <div className="auth-wrapper">
                 <div className="auth-content">
@@ -156,7 +156,7 @@ const SignUp = () => {
                     </div>
                 </div>
             </div>
-        </Aux>
+        </AuthAux>
     );
 }
 
