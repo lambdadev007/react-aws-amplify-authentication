@@ -1,0 +1,94 @@
+@import "~bootstrap/dist/css/bootstrap";
+
+.main {
+    height: calc(100vh - 74px);
+    margin-top: -74px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+h4 {
+    font-weight: normal;
+}
+.btn-primary {
+    background-color: #2f55d4!important;
+    border: 1px solid #2f55d4!important;
+    box-shadow: 0 3px 5px 0 rgba(47,85,212,.3);
+}
+.play-icon {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+
+    a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 60px;
+        height: 60px;
+        background-color: #fff;
+        border-radius: 50%;
+        color: #2f55d4!important;
+
+        &:hover {
+            svg {
+                &.normal {
+                    display: none;
+                }
+                &.hover {
+                    display: block;
+                }
+            }
+        }
+
+        svg {
+            display: block;
+            width: 15px;
+            height: 15px;
+
+            &.normal {
+                display: block;
+            }
+            &.hover {
+                display: none;
+            }
+        }
+    }
+}
+.ReactModal__Overlay {
+    opacity: 0;
+    transition: opacity 200ms ease-in-out;
+}
+
+.ReactModal__Overlay--after-open{
+    opacity: 1;
+}
+
+.ReactModal__Overlay--before-close{
+    opacity: 0;
+}
+// .video-modal {
+//     position: relative;
+//     .modal-close {
+//         position: absolute;
+//         top: -30px;
+//         right: -30px;
+//         border: none;
+//         outline: none;
+//         background: transparent;
+//     }
+//     .video-wrapper {
+//         position: relative;
+//         iframe {
+//             position: absolute;
+//             top: 0px;
+//             left: 0px;
+//             width: 100%;
+//             height: 100%;
+//         }
+//     }
+// }
