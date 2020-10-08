@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import Modal from 'react-modal';
+import { Play } from 'react-feather';
 
-import Aux from '../../../hoc/_Aux/index';
+import AuthAux from '../../../hoc/_Aux/auth';
 import Navbar from '../../layout/HomeLayout/Navbar';
 import './index.scss';
 import banner from '../../../assets/images/banner.jpg';
@@ -37,7 +38,7 @@ const HomePage = () => {
     }
 
     return (
-        <Aux>
+        <AuthAux>
             <Navbar />
 
             <section className="container" id="home">
@@ -64,13 +65,7 @@ const HomePage = () => {
                                 <img src={banner} className="rounded img-fluid mx-auto d-block" alt="" />
                                 <div className="play-icon">
                                     <NavLink className="play-btn video-play-icon" to="#" onClick={() => openModal()}>
-                                        <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="play" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className="svg-inline--fa fa-play normal fa-w-14 fa-3x">
-                                            <path fill="currentColor" d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6zm-16.2 55.1l-352 208C45.6 483.9 32 476.6 32 464V47.9c0-16.3 16.4-18.4 24.1-13.8l352 208.1c10.5 6.2 10.5 21.4.1 27.6z" className=""></path>
-                                        </svg>
-
-                                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className="svg-inline--fa fa-play hover fa-w-14 fa-3x">
-                                            <path fill="currentColor" d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z" className=""></path>
-                                        </svg>
+                                        <Play />
                                     </NavLink>
                                 </div>
 
@@ -96,7 +91,7 @@ const HomePage = () => {
                     </div>
                 </div>
             </section>
-        </Aux>
+        </AuthAux>
     );
 };
 

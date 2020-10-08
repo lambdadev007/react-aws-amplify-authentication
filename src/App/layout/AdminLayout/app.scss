@@ -1,1 +1,29 @@
 @import "../../../assets/scss/style";
+
+body {
+    background: #fff;
+}
+.container {
+    .pcoded-content {
+        padding: 0;
+        padding-top: 30px;
+    }
+}
+.pcoded-header {
+    z-index: 1028;
+    position: relative;
+    display: flex;
+    min-height: 70px;
+    padding-right: 15px;
+    padding-left: 15px;
+    position: relative;
+    top: 0;
+    background: transparent;
+    color: #3f4d67;
+    width: unset;
+    margin-left: auto;
+
+    .m-header {
+        display: block;
+    }
+}

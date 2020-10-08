@@ -3,7 +3,6 @@ import { NavLink } from 'react-router-dom';
 
 import "./../../../../assets/scss/style.scss";
 import AuthAux from "./../../../../hoc/_Aux/auth";
-import Breadcrumb from "../../../layout/AdminLayout/Breadcrumb";
 import DEMO from "../../../../store/constant";
 
 import { Auth } from 'aws-amplify';
@@ -82,7 +81,6 @@ const SignUp = () => {
 
     return(
         <AuthAux>
-            <Breadcrumb/>
             <div className="auth-wrapper">
                 <div className="auth-content">
                     <div className="auth-bg">

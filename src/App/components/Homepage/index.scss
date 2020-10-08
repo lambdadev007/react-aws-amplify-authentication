@@ -32,23 +32,17 @@ h4 {
         height: 60px;
         background-color: #fff;
         border-radius: 50%;
-        color: #2f55d4!important;
+        color: #2f55d4;
 
         &:hover {
-            svg {
-                &.normal {
-                    display: none;
-                }
-                &.hover {
-                    display: block;
-                }
-            }
+            background-color: #2f55d4;
+            color: #fff;
         }
 
         svg {
             display: block;
-            width: 15px;
-            height: 15px;
+            width: 18px;
+            height: 18px;
 
             &.normal {
                 display: block;
