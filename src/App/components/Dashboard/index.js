@@ -1,10 +1,12 @@
-import React, { useState, useEffect, createRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { API, graphqlOperation  } from 'aws-amplify'
 import { ToastContainer, toast } from 'react-toastify';
 
 import { getContacts, listContactss } from "../../../graphql/queries";
 import { createContacts, updateContacts, deleteContacts } from '../../../graphql/mutations';
-import { onDeleteContacts } from '../../../graphql/subscriptions';
+import { onCreateContacts, onUpdateContacts, onDeleteContacts } from '../../../graphql/subscriptions';
+
+import { CognitoAuthUserContext } from "../../index";
 
 // import { Row, Col, Card } from 'react-bootstrap';
 import Breadcrumb from '../../layout/AdminLayout/Breadcrumb';
@@ -30,7 +32,10 @@ const Dashboard = () => {
     const [formFields, setFormFields] = useState(initialFormFields);
     const [editId, setEditId] = useState(undefined);
     const [allContacts, setAllContacts] = useState();
-    const nameRef = createRef();
+    const [contactGroups, setContactGroups] = useState();
+    const nameRef = useRef();
+
+    const user = useContext(CognitoAuthUserContext);
 
     const toaster = (type, message) => {
         if (type === 'success') {
@@ -72,7 +77,8 @@ const Dashboard = () => {
             });
             setTitle('Edit contact');
             setFormType('edit');
-            nameRef.getInputDOMNode.focus();
+            nameRef.current.focus();
+            console.log('[nameRef]', nameRef);
         }
         else {
             toaster('error', 'Contact not found');
@@ -81,22 +87,28 @@ const Dashboard = () => {
         }
     }
 
-    const getAllContacts = async () => {
-        const result = await API.graphql(graphqlOperation(listContactss));
-        const filteredResult = result.data.listContactss.items.sort((a, b) => {
-            return (a.Name < b.Name) ? -1 : (a.Name > b.Name) ? 1 : 0;
+    const groupContacts = (contacts) => {
+        let groupedContacts = [];
+        const filteredContacts = contacts.sort((a, b) => {
+            const m = a.Name.toLowerCase();
+            const n = b.Name.toLowerCase();
+            return (m < n) ? -1 : (m > n) ? 1 : 0;
         });
 
-        let groupedCollection = [];   
-        for(let i = 0; i < filteredResult.length; i++){//loop throug collection         
-            var firstLetter = filteredResult[i].Name.charAt(0);
-            if(groupedCollection[firstLetter] === undefined){             
-                groupedCollection[firstLetter] = [];         
+        for(let i = 0; i < filteredContacts.length; i++){//loop throug collection         
+            var firstLetter = filteredContacts[i].Name.charAt(0).toLowerCase();
+            if(groupedContacts[firstLetter] === undefined){             
+                groupedContacts[firstLetter] = [];         
             }         
-            groupedCollection[firstLetter].push(filteredResult[i]);     
+            groupedContacts[firstLetter].push(filteredContacts[i]);     
         }
 
-        setAllContacts(Object.entries(groupedCollection));
+        return Object.entries(groupedContacts);
+    }
+
+    const getAllContacts = async () => {
+        const result = await API.graphql(graphqlOperation(listContactss));
+        setAllContacts(result.data.listContactss.items);
     };
 
     const handleCreateRecord = async (e) => {
@@ -177,6 +189,39 @@ const Dashboard = () => {
         setFormFields((prevState) => ({...prevState, [state]: value}));
     }
 
+    const createEventHandler = (contactsData) => {
+        const createdContact = contactsData.value.data.onCreateContacts;
+
+        console.log('[createEventHandler]', createdContact);
+        console.log('[allContacts]', allContacts);
+
+        if(allContacts !== undefined)
+            setAllContacts([...allContacts, createdContact]);
+    }
+
+    const updateEventHandler = (contactsData) => {
+
+        const updatedContact = contactsData.value.data.onUpdateContacts;
+
+        if(allContacts !== undefined) {
+            const updatedContacts = allContacts.map((contact) => {
+                if(contact.id === updatedContact.id) return updatedContact;
+                else return contact;
+            })
+    
+            setAllContacts(updatedContacts);
+        }
+    }
+
+    const deleteEventHandler = (contactsData) => {
+        const deletedContact = contactsData.value.data.onDeleteContacts;
+
+        if(allContacts) {
+            const updatedContacts = allContacts.filter((contact) => contact.id !== deletedContact.id);
+            setAllContacts(updatedContacts);
+        }
+    }
+
     useEffect(() => {
         console.log('[formFields]', formFields);
     }, [formFields]);
@@ -185,6 +230,47 @@ const Dashboard = () => {
         getAllContacts();
         setTitle('Add new contact');
     }, []);
+
+    useEffect(() => {
+        console.log('[allContacts]', allContacts);
+
+        const deleteListener = async () => {
+            await API.graphql(
+                graphqlOperation(onDeleteContacts, { owner: user.attributes.sub })
+            ).subscribe({
+                next: (contactsData) => {
+                    deleteEventHandler(contactsData);
+                }
+            });
+        }
+        deleteListener();
+
+        const createListener = async () => {
+            await API.graphql(
+                graphqlOperation(onCreateContacts, { owner: user.attributes.sub })
+            ).subscribe({
+                next: (contactsData) => {
+                    createEventHandler(contactsData);
+                }
+            });
+        }
+        createListener();
+
+        const updateListener = async () => {
+            await API.graphql(
+                graphqlOperation(onUpdateContacts, { owner: user.attributes.sub })
+            ).subscribe({
+                next: (contactsData) => {
+                    updateEventHandler(contactsData);
+                }
+            });
+        }
+        updateListener();
+
+        if(allContacts)
+            setContactGroups(groupContacts(allContacts));
+
+    }, [allContacts]);
 
     return (
         <Aux>
@@ -216,7 +302,7 @@ const Dashboard = () => {
 
             <ContactsContainer
              onEditRequest={editRequestHandler} 
-             allContacts={allContacts} 
+             allContacts={contactGroups} 
              handleDeleteContact={handleDeleteContact}
             />
 

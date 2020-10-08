@@ -1,9 +1,11 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useEffect } from 'react';
 import { UserPlus } from 'react-feather';
 
 
-const ContactForm = forwardRef((props, ref) => {
-
+const ContactForm = (props, ref) => {
+    useEffect(() => {
+        console.log('[ref]', ref);
+    }, [ref]);
     return (
         <div>
             <div className="page-wrapper">
@@ -87,6 +89,6 @@ const ContactForm = forwardRef((props, ref) => {
             </div>
         </div>
     );
-});
+};
 
-export default ContactForm;
+export default forwardRef(ContactForm);
