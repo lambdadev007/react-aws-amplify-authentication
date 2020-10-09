@@ -9,6 +9,12 @@ const ContactsContainer = props => {
         </div>
     )
 
+    if (props.allContacts.length === 0) return (
+        <div>
+            <p className="text-center">No contacts found</p>
+        </div>
+    )
+
     return props.allContacts.map((contacts) => {
         return (
             <div className="card Recent-Users" key={contacts[0]}>

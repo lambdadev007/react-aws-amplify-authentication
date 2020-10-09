@@ -1,11 +1,8 @@
-import React, { forwardRef, useEffect } from 'react';
+import React, { forwardRef } from 'react';
 import { UserPlus } from 'react-feather';
 
 
 const ContactForm = (props, ref) => {
-    useEffect(() => {
-        console.log('[ref]', ref);
-    }, [ref]);
     return (
         <div>
             <div className="page-wrapper">

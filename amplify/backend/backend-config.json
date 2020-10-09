@@ -1,6 +1,6 @@
 {
   "auth": {
-    "contactsbook9d98314d": {
+    "contactsbookv12d47ae70b": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
@@ -8,7 +8,7 @@
     }
   },
   "api": {
-    "contactsbook": {
+    "contactsbookv12": {
       "service": "AppSync",
       "providerPlugin": "awscloudformation",
       "output": {
@@ -16,7 +16,7 @@
           "defaultAuthentication": {
             "authenticationType": "AMAZON_COGNITO_USER_POOLS",
             "userPoolConfig": {
-              "userPoolId": "authcontactsbook9d98314d"
+              "userPoolId": "authcontactsbookv12d47ae70b"
             }
           },
           "additionalAuthenticationProviders": []

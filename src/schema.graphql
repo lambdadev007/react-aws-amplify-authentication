@@ -1,4 +1,4 @@
-type Contacts @model @auth(rules: [{ allow: owner }]) {
+type Contacts @model @auth(rules: [{ allow: owner, operations: [create, delete, update]}]) {
   id: ID!
   Name: String!
   TeamName: String
@@ -7,4 +7,5 @@ type Contacts @model @auth(rules: [{ allow: owner }]) {
   Email: String
   Phone: String
   Region: String
+  owner: String
 }

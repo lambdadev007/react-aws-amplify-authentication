@@ -2,8 +2,8 @@
 // this is an auto generated file. This will be overwritten
 
 export const onCreateContacts = /* GraphQL */ `
-  subscription OnCreateContacts($owner: String!) {
-    onCreateContacts(owner: $owner) {
+  subscription OnCreateContacts {
+    onCreateContacts {
       id
       Name
       TeamName
@@ -12,15 +12,15 @@ export const onCreateContacts = /* GraphQL */ `
       Email
       Phone
       Region
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
 export const onUpdateContacts = /* GraphQL */ `
-  subscription OnUpdateContacts($owner: String!) {
-    onUpdateContacts(owner: $owner) {
+  subscription OnUpdateContacts {
+    onUpdateContacts {
       id
       Name
       TeamName
@@ -29,15 +29,15 @@ export const onUpdateContacts = /* GraphQL */ `
       Email
       Phone
       Region
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
 export const onDeleteContacts = /* GraphQL */ `
-  subscription OnDeleteContacts($owner: String!) {
-    onDeleteContacts(owner: $owner) {
+  subscription OnDeleteContacts {
+    onDeleteContacts {
       id
       Name
       TeamName
@@ -46,9 +46,9 @@ export const onDeleteContacts = /* GraphQL */ `
       Email
       Phone
       Region
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;

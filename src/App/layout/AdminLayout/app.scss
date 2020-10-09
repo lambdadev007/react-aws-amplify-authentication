@@ -27,3 +27,19 @@ body {
         display: block;
     }
 }
+.nav-tabs {
+    .nav-item {
+        position: relative;
+        &.active {
+            &::after {
+                content: "";
+                background-color: #04a9f5;
+                position: absolute;
+                left: 0;
+                top: 10px;
+                width: 4px;
+                height: 20px;
+            }
+        }
+    }
+}

@@ -12,9 +12,9 @@ export const getContacts = /* GraphQL */ `
       Email
       Phone
       Region
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -34,9 +34,9 @@ export const listContactss = /* GraphQL */ `
         Email
         Phone
         Region
+        owner
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }

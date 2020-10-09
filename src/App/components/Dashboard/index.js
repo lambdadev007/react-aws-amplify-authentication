@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { API, graphqlOperation  } from 'aws-amplify'
+import { API, graphqlOperation  } from 'aws-amplify';
 import { ToastContainer, toast } from 'react-toastify';
+import {Tabs, Tab} from 'react-bootstrap';
 
 import { getContacts, listContactss } from "../../../graphql/queries";
 import { createContacts, updateContacts, deleteContacts } from '../../../graphql/mutations';
@@ -12,6 +13,8 @@ import { CognitoAuthUserContext } from "../../index";
 import Breadcrumb from '../../layout/AdminLayout/Breadcrumb';
 import ContactForm from '../ContactForm';
 import ContactsContainer from '../ContactsContainer';
+import Team from '../ContactsContainer/Team';
+import Role from '../ContactsContainer/Role';
 import 'react-toastify/dist/ReactToastify.css';
 
 import Aux from "../../../hoc/_Aux";
@@ -32,7 +35,10 @@ const Dashboard = () => {
     const [formFields, setFormFields] = useState(initialFormFields);
     const [editId, setEditId] = useState(undefined);
     const [allContacts, setAllContacts] = useState();
+    const [allTeams, setAllTeams] = useState();
+    const [allRoles, setAllRoles] = useState();
     const [contactGroups, setContactGroups] = useState();
+    const [tabKey, setTabKey] = useState('name');
     const nameRef = useRef();
 
     const user = useContext(CognitoAuthUserContext);
@@ -107,6 +113,10 @@ const Dashboard = () => {
     }
 
     const getAllContacts = async () => {
+        // Amplify.configure({
+        //     "aws_appsync_authenticationType": "API_KEY", 
+        // });
+
         const result = await API.graphql(graphqlOperation(listContactss));
         setAllContacts(result.data.listContactss.items);
     };
@@ -189,42 +199,41 @@ const Dashboard = () => {
         setFormFields((prevState) => ({...prevState, [state]: value}));
     }
 
-    const createEventHandler = (contactsData) => {
-        const createdContact = contactsData.value.data.onCreateContacts;
+    const tabSelectHandler = (key) => {
+        if (key === 'team') {
+            let temp = allContacts.map((contact) => {
+                return contact.TeamName
+            });
+            temp = temp.filter((value, index, self) => {
+                return self.indexOf(value) === index; // get unique team names
+            });
+            temp = temp.sort((a, b) => {
+                const m = a.toLowerCase();
+                const n = b.toLowerCase();
+                return (m < n) ? -1 : (m > n) ? 1 : 0;
+            });
 
-        console.log('[createEventHandler]', createdContact);
-        console.log('[allContacts]', allContacts);
-
-        if(allContacts !== undefined)
-            setAllContacts([...allContacts, createdContact]);
-    }
-
-    const updateEventHandler = (contactsData) => {
-
-        const updatedContact = contactsData.value.data.onUpdateContacts;
-
-        if(allContacts !== undefined) {
-            const updatedContacts = allContacts.map((contact) => {
-                if(contact.id === updatedContact.id) return updatedContact;
-                else return contact;
-            })
-    
-            setAllContacts(updatedContacts);
+            console.log('[temp]', temp);
+            setAllTeams(temp);
         }
-    }
+        else if (key === 'role') {
+            let temp = allContacts.map((contact) => {
+                return contact.Role
+            });
+            temp = temp.filter((value, index, self) => {
+                return self.indexOf(value) === index; // get unique team names
+            });
+            temp = temp.sort((a, b) => {
+                const m = a.toLowerCase();
+                const n = b.toLowerCase();
+                return (m < n) ? -1 : (m > n) ? 1 : 0;
+            });
 
-    const deleteEventHandler = (contactsData) => {
-        const deletedContact = contactsData.value.data.onDeleteContacts;
-
-        if(allContacts) {
-            const updatedContacts = allContacts.filter((contact) => contact.id !== deletedContact.id);
-            setAllContacts(updatedContacts);
+            console.log('[temp]', temp);
+            setAllRoles(temp);
         }
+        setTabKey(key);
     }
-
-    useEffect(() => {
-        console.log('[formFields]', formFields);
-    }, [formFields]);
 
     useEffect(() => {
         getAllContacts();
@@ -232,45 +241,58 @@ const Dashboard = () => {
     }, []);
 
     useEffect(() => {
+        console.log('[user]', user);
+    }, [user]);
+
+    useEffect(() => {
         console.log('[allContacts]', allContacts);
-
-        const deleteListener = async () => {
-            await API.graphql(
-                graphqlOperation(onDeleteContacts, { owner: user.attributes.sub })
-            ).subscribe({
-                next: (contactsData) => {
-                    deleteEventHandler(contactsData);
-                }
-            });
-        }
-        deleteListener();
-
-        const createListener = async () => {
-            await API.graphql(
-                graphqlOperation(onCreateContacts, { owner: user.attributes.sub })
-            ).subscribe({
-                next: (contactsData) => {
-                    createEventHandler(contactsData);
-                }
-            });
-        }
-        createListener();
-
-        const updateListener = async () => {
-            await API.graphql(
-                graphqlOperation(onUpdateContacts, { owner: user.attributes.sub })
-            ).subscribe({
-                next: (contactsData) => {
-                    updateEventHandler(contactsData);
-                }
-            });
-        }
-        updateListener();
-
         if(allContacts)
             setContactGroups(groupContacts(allContacts));
-
     }, [allContacts]);
+
+    useEffect(() => {
+        const deleteListener = API.graphql(
+            graphqlOperation(onDeleteContacts, { owner: user.attributes.sub })
+        ).subscribe({
+            next: (contactsData) => {
+                const deletedContact = contactsData.value.data.onDeleteContacts;
+
+                const updatedContacts = allContacts.filter((contact) => contact.id !== deletedContact.id);
+                setAllContacts(updatedContacts);
+            }
+        });
+
+        const createListener = API.graphql(
+            graphqlOperation(onCreateContacts, { owner: user.attributes.sub })
+        ).subscribe({
+            next: (contactsData) => {
+                const createdContact = contactsData.value.data.onCreateContacts;
+
+                setAllContacts([...allContacts, createdContact]);
+            }
+        });
+
+        const updateListener = API.graphql(
+            graphqlOperation(onUpdateContacts, { owner: user.attributes.sub })
+        ).subscribe({
+            next: (contactsData) => {
+                const updatedContact = contactsData.value.data.onUpdateContacts;
+        
+                const updatedContacts = allContacts.map((contact) => {
+                    if(contact.id === updatedContact.id) return updatedContact;
+                    else return contact;
+                })
+        
+                setAllContacts(updatedContacts);
+            }
+        });
+
+        return function cleanup() {
+            deleteListener.unsubscribe();
+            createListener.unsubscribe();
+            updateListener.unsubscribe();
+        }
+    }, [allContacts, user.attributes.sub]);
 
     return (
         <Aux>
@@ -300,11 +322,21 @@ const Dashboard = () => {
              ref={nameRef} 
             />
 
-            <ContactsContainer
-             onEditRequest={editRequestHandler} 
-             allContacts={contactGroups} 
-             handleDeleteContact={handleDeleteContact}
-            />
+            <Tabs activeKey={tabKey} onSelect={(key) => tabSelectHandler(key)} id="uncontrolled-tab-example">
+                <Tab eventKey="name" title="NAME">
+                    <ContactsContainer
+                     onEditRequest={editRequestHandler} 
+                     allContacts={contactGroups} 
+                     handleDeleteContact={handleDeleteContact}
+                    />
+                </Tab>
+                <Tab eventKey="team" title="TEAM NAME">
+                    <Team allTeams={allTeams} />
+                </Tab>
+                <Tab eventKey="role" title="ROLE">
+                    <Role allRoles={allRoles} />
+                </Tab>
+            </Tabs>
 
         </Aux>
     );

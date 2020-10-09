@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Female from '../../../../assets/images/user/avatar-1.jpg';
 import Male from '../../../../assets/images/user/avatar-2.jpg';
 import { Mail, Smartphone, UserMinus, Edit } from 'react-feather';
 
+import { CognitoAuthUserContext } from "../../../index";
+
 const Contact = props => {
+    const user = useContext(CognitoAuthUserContext);
+
     return (
         <tr className="unread" key={props.contact.id}>
             <td>
@@ -24,8 +28,14 @@ const Contact = props => {
                 <p className="m-0"><Smartphone color="orange" size="15" />{' '}{props.contact.Phone}</p>
             </td>
             <td className="d-flex justify-content-end">
-                <button className="btn btn-outline-primary" onClick={() => props.onEditRequest(props.contact.id)}><Edit /></button>
-                <button onClick={() => props.handleDeleteContact(props.contact.id)} className="btn btn-outline-danger"><UserMinus /></button>
+                {
+                    user.attributes.sub === props.contact.owner ? (
+                        <>
+                            <button className="btn btn-outline-primary" onClick={() => props.onEditRequest(props.contact.id)}><Edit /></button>
+                            <button onClick={() => props.handleDeleteContact(props.contact.id)} className="btn btn-outline-danger"><UserMinus /></button>
+                        </>
+                    ) : null
+                }
             </td>
         </tr>
     );

@@ -15,9 +15,9 @@ export const createContacts = /* GraphQL */ `
       Email
       Phone
       Region
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -35,9 +35,9 @@ export const updateContacts = /* GraphQL */ `
       Email
       Phone
       Region
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -55,9 +55,9 @@ export const deleteContacts = /* GraphQL */ `
       Email
       Phone
       Region
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
