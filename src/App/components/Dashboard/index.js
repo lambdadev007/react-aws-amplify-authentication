@@ -13,8 +13,8 @@ import { CognitoAuthUserContext } from "../../index";
 import Breadcrumb from '../../layout/AdminLayout/Breadcrumb';
 import ContactForm from '../ContactForm';
 import ContactsContainer from '../ContactsContainer';
-import Team from '../ContactsContainer/Team';
-import Role from '../ContactsContainer/Role';
+import TeamsContainer from '../TeamsContainer';
+import RolesContainer from '../RolesContainer';
 import 'react-toastify/dist/ReactToastify.css';
 
 import Aux from "../../../hoc/_Aux";
@@ -112,6 +112,25 @@ const Dashboard = () => {
         return Object.entries(groupedContacts);
     }
 
+    const groupTeamsOrRoles = (teams) => {
+        let groupedTeams = [];
+        const filteredTeams = teams.sort((a, b) => {
+            const m = a.toLowerCase();
+            const n = b.toLowerCase();
+            return (m < n) ? -1 : (m > n) ? 1 : 0;
+        });
+
+        for(let i = 0; i < filteredTeams.length; i++){//loop throug collection         
+            var firstLetter = filteredTeams[i].charAt(0).toLowerCase();
+            if(groupedTeams[firstLetter] === undefined){             
+                groupedTeams[firstLetter] = [];         
+            }         
+            groupedTeams[firstLetter].push(filteredTeams[i]);     
+        }
+        console.log('[groupTeamsOrRoles]', Object.entries(groupedTeams));
+        return Object.entries(groupedTeams);
+    }
+
     const getAllContacts = async () => {
         // Amplify.configure({
         //     "aws_appsync_authenticationType": "API_KEY", 
@@ -207,14 +226,8 @@ const Dashboard = () => {
             temp = temp.filter((value, index, self) => {
                 return self.indexOf(value) === index; // get unique team names
             });
-            temp = temp.sort((a, b) => {
-                const m = a.toLowerCase();
-                const n = b.toLowerCase();
-                return (m < n) ? -1 : (m > n) ? 1 : 0;
-            });
 
-            console.log('[temp]', temp);
-            setAllTeams(temp);
+            setAllTeams(groupTeamsOrRoles(temp));
         }
         else if (key === 'role') {
             let temp = allContacts.map((contact) => {
@@ -223,14 +236,8 @@ const Dashboard = () => {
             temp = temp.filter((value, index, self) => {
                 return self.indexOf(value) === index; // get unique team names
             });
-            temp = temp.sort((a, b) => {
-                const m = a.toLowerCase();
-                const n = b.toLowerCase();
-                return (m < n) ? -1 : (m > n) ? 1 : 0;
-            });
 
-            console.log('[temp]', temp);
-            setAllRoles(temp);
+            setAllRoles(groupTeamsOrRoles(temp));
         }
         setTabKey(key);
     }
@@ -331,10 +338,10 @@ const Dashboard = () => {
                     />
                 </Tab>
                 <Tab eventKey="team" title="TEAM NAME">
-                    <Team allTeams={allTeams} />
+                    <TeamsContainer allTeams={allTeams} />
                 </Tab>
                 <Tab eventKey="role" title="ROLE">
-                    <Role allRoles={allRoles} />
+                    <RolesContainer allRoles={allRoles} />
                 </Tab>
             </Tabs>
 
