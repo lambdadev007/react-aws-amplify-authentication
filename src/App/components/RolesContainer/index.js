@@ -1,5 +1,6 @@
 import React from 'react';
-
+import { ArrowUp } from 'react-feather';
+import { NavLink } from 'react-router-dom';
 import Role from './Role'
 
 const RolesContainer = props => {
@@ -18,8 +19,14 @@ const RolesContainer = props => {
     return props.allRoles.map((roles) => {
         return (
             <div className="card Recent-Users" key={roles[0]}>
-                <div className="card-header">
+                <div className="card-header" id={`role-${roles[0]}`}>
                     <h5 style={{textTransform: "uppercase"}}>{roles[0]}</h5>
+
+                    <div className="arrow-wrapper">
+                        <NavLink to="#" onClick={() => { window.scrollTo(0, 0); }}>
+                            <ArrowUp />
+                        </NavLink>
+                    </div>
                 </div>
                 <div className="card-block px-0 py-3">
                     <div className="table-responsive px-4">

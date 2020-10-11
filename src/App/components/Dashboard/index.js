@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import { API, graphqlOperation  } from 'aws-amplify';
 import { ToastContainer, toast } from 'react-toastify';
 import {Tabs, Tab} from 'react-bootstrap';
+import { NavLink } from 'react-router-dom';
+import { ChevronDown } from 'react-feather';
 
 import { getContacts, listContactss } from "../../../graphql/queries";
 import { createContacts, updateContacts, deleteContacts } from '../../../graphql/mutations';
@@ -38,9 +40,22 @@ const Dashboard = () => {
     const [allTeams, setAllTeams] = useState();
     const [allRoles, setAllRoles] = useState();
     const [contactGroups, setContactGroups] = useState();
+    const [contactsAlphabet, setContactsAlphabet] = useState();
+    const [teamsAlphabet, setTeamsAlphabet] = useState();
+    const [rolesAlphabet, setRolesAlphabet] = useState();
+    const [bodyShow, setBodyShow] = useState(true);
     const [tabKey, setTabKey] = useState('name');
     const nameRef = useRef();
-
+    const alphabet = [
+        '1', '2', '3', '4', '5', '6', '7', '8', '9', '!', '"', 
+        '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', 
+        '.', '/', ':', ';', '=', '?', '@', '[', '\\', ']', '^', 
+        '_', '`', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 
+        'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 
+        'u', 'v', 'w', 'x', 'y', 'z', '{', '|', '}', '~', '¢', 
+        '£', '¥', '©', '®', '°', '¶', '×', '÷', 'Π', '•', '€', 
+        '™', '∆', '√', '✓'
+    ];
     const user = useContext(CognitoAuthUserContext);
 
     const toaster = (type, message) => {
@@ -242,6 +257,27 @@ const Dashboard = () => {
         setTabKey(key);
     }
 
+    const getPosition = (element) => {
+        var xPosition = 0;
+        var yPosition = 0;
+    
+        while(element) {
+            xPosition += (element.offsetLeft - element.scrollLeft + element.clientLeft);
+            yPosition += (element.offsetTop - element.scrollTop + element.clientTop);
+            element = element.offsetParent;
+        }
+    
+        return { x: xPosition, y: yPosition };
+    }
+
+    const scrollTo = (alphabet) => {
+        if(document.getElementById(alphabet)) {
+            const position = getPosition(document.getElementById(alphabet));
+            console.log('[alphabet]', position);
+            window.scrollTo(0, position.y);
+        }
+    }
+
     useEffect(() => {
         getAllContacts();
         setTitle('Add new contact');
@@ -256,6 +292,30 @@ const Dashboard = () => {
         if(allContacts)
             setContactGroups(groupContacts(allContacts));
     }, [allContacts]);
+
+    useEffect(() => {
+        if(contactGroups) {
+            console.log('[contactGroups-1]', contactGroups);
+            console.log('[contactGroups-2]', contactGroups.map((item) => item[0]));
+            setContactsAlphabet(contactGroups.map((item) => item[0]));
+        }
+    }, [contactGroups]);
+
+    useEffect(() => {
+        if(allTeams) {
+            console.log('[allTeams-1]', allTeams);
+            console.log('[allTeams-2]', allTeams.map((item) => item[0]));
+            setTeamsAlphabet(allTeams.map((item) => item[0]));
+        }
+    }, [allTeams]);
+
+    useEffect(() => {
+        if(allRoles) {
+            console.log('[allRoles-1]', allRoles);
+            console.log('[allRoles-2]', allRoles.map((item) => item[0]));
+            setRolesAlphabet(allRoles.map((item) => item[0]));
+        }
+    }, [allRoles]);
 
     useEffect(() => {
         const deleteListener = API.graphql(
@@ -329,19 +389,81 @@ const Dashboard = () => {
              ref={nameRef} 
             />
 
-            <Tabs activeKey={tabKey} onSelect={(key) => tabSelectHandler(key)} id="uncontrolled-tab-example">
+            <Tabs activeKey={tabKey} onSelect={(key) => tabSelectHandler(key)} id="controlled-tab">
                 <Tab eventKey="name" title="NAME">
-                    <ContactsContainer
-                     onEditRequest={editRequestHandler} 
-                     allContacts={contactGroups} 
-                     handleDeleteContact={handleDeleteContact}
-                    />
+                    <div className="accordion-toggler">
+                        <NavLink to="#" className={`${bodyShow ? 'down' : 'up'}`} onClick={() => { setBodyShow(!bodyShow) }}>
+                            <ChevronDown />
+                        </NavLink>
+                    </div>
+
+                    <div className={`contacts-wrapper accordion-body ${bodyShow ? 'show' : 'hide'}`}>
+                        <div className="alphabet-wrapper">
+                            {
+                                contactsAlphabet ? (
+                                    alphabet.map((item, index) => {
+                                        if(contactsAlphabet.includes(item))
+                                            return <NavLink to={`/dashboard`} onClick={() => scrollTo(`contact-${item}`)} key={index}>{item}</NavLink>
+                                        else
+                                            return <NavLink to={`/dashboard`} className="disabled" key={index}>{item}</NavLink>
+                                    })
+                                ) : null
+                            }
+                        </div>
+                        <ContactsContainer
+                            onEditRequest={editRequestHandler} 
+                            allContacts={contactGroups} 
+                            handleDeleteContact={handleDeleteContact}
+                        />
+                    </div>
                 </Tab>
                 <Tab eventKey="team" title="TEAM NAME">
-                    <TeamsContainer allTeams={allTeams} />
+                    <div className="accordion-toggler">
+                        <NavLink to="#" className={`${bodyShow ? 'down' : 'up'}`} onClick={() => { setBodyShow(!bodyShow) }}>
+                            <ChevronDown />
+                        </NavLink>
+                    </div>
+
+                    <div className={`teams-wrapper accordion-body ${bodyShow ? 'show' : 'hide'}`}>
+                        <div className="alphabet-wrapper">
+                            {
+                                teamsAlphabet ? (
+                                    alphabet.map((item, index) => {
+                                        if(teamsAlphabet.includes(item))
+                                            return <NavLink to={`/dashboard`} onClick={() => scrollTo(`team-${item}`)} key={index}>{item}</NavLink>
+                                        else
+                                            return <NavLink to={`/dashboard`} className="disabled" key={index}>{item}</NavLink>
+                                    })
+                                ) : null
+                            }
+                        </div>
+
+                        <TeamsContainer allTeams={allTeams} />
+                    </div>
                 </Tab>
                 <Tab eventKey="role" title="ROLE">
-                    <RolesContainer allRoles={allRoles} />
+                    <div className="accordion-toggler">
+                        <NavLink to="#" className={`${bodyShow ? 'down' : 'up'}`} onClick={() => { setBodyShow(!bodyShow) }}>
+                            <ChevronDown />
+                        </NavLink>
+                    </div>
+
+                    <div className={`roles-wrapper accordion-body ${bodyShow ? 'show' : 'hide'}`}>
+                        <div className="alphabet-wrapper">
+                            {
+                                rolesAlphabet ? (
+                                    alphabet.map((item, index) => {
+                                        if(rolesAlphabet.includes(item))
+                                            return <NavLink to={`/dashboard`} onClick={() => scrollTo(`role-${item}`)} key={index}>{item}</NavLink>
+                                        else
+                                            return <NavLink to={`/dashboard`} className="disabled" key={index}>{item}</NavLink>
+                                    })
+                                ) : null
+                            }
+                        </div>
+
+                        <RolesContainer allRoles={allRoles} />
+                    </div>
                 </Tab>
             </Tabs>
 

@@ -1,16 +1,29 @@
-import React, { forwardRef } from 'react';
-import { UserPlus } from 'react-feather';
+import React, { useEffect, useState, forwardRef } from 'react';
+import { UserPlus, ChevronDown } from 'react-feather';
+import { NavLink } from 'react-router-dom';
 
 
 const ContactForm = (props, ref) => {
+    const [bodyShow, setBodyShow] = useState(true);
+
+    useEffect(() => {
+        console.log('[body height]', document.getElementById('accordion-body-1').clientHeight);
+        document.getElementById('accordion-body-1').style.height = document.getElementById('accordion-body-1').clientHeight + 'px';
+    }, []);
     return (
         <div>
-            <div className="page-wrapper">
+            <div className="page-wrapper contact-form">
                 <div className="card">
                     <div className="card-header">
                         <h5>{props.title}</h5>
+
+                        <div className="accordion-toggler">
+                            <NavLink to="#" className={`${bodyShow ? 'down' : 'up'}`} onClick={() => { setBodyShow(!bodyShow) }}>
+                                <ChevronDown />
+                            </NavLink>
+                        </div>
                     </div>
-                    <div className="card-body">
+                    <div className={`card-body accordion-body ${bodyShow ? 'show' : 'hide'}`} id="accordion-body-1">
                         <form onSubmit={props.formType === 'create' ? props.handleCreateRecord : props.handleUpdateRecord}>
                             <div className="row">
                                 <div className="col-md-4 col-sm-12">

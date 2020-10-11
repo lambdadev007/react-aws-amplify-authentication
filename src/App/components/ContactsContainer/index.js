@@ -1,4 +1,6 @@
 import React from 'react';
+import { ArrowUp } from 'react-feather';
+import { NavLink } from 'react-router-dom';
 
 import Contact from './Contact'
 
@@ -18,8 +20,14 @@ const ContactsContainer = props => {
     return props.allContacts.map((contacts) => {
         return (
             <div className="card Recent-Users" key={contacts[0]}>
-                <div className="card-header">
+                <div className="card-header" id={`contact-${contacts[0]}`}>
                     <h5 style={{textTransform: "uppercase"}}>{contacts[0]}</h5>
+
+                    <div className="arrow-wrapper">
+                        <NavLink to="#" onClick={() => { window.scrollTo(0, 0); }}>
+                            <ArrowUp />
+                        </NavLink>
+                    </div>
                 </div>
                 <div className="card-block px-0 py-3">
                     <div className="table-responsive px-4">

@@ -1,5 +1,7 @@
 @import "../../../assets/scss/style";
-
+html {
+    scroll-behavior: smooth;
+}
 body {
     background: #fff;
 }
@@ -27,6 +29,9 @@ body {
         display: block;
     }
 }
+.pcoded-header .dropdown.show:before {
+    left: -20px;
+}
 .nav-tabs {
     .nav-item {
         position: relative;
@@ -41,5 +46,91 @@ body {
                 height: 20px;
             }
         }
+    }
+}
+.alphabet-wrapper {
+    margin-bottom: 20px;
+    overflow-wrap: break-word;
+    display: flex;
+    flex-wrap: wrap;
+
+    a {
+        text-transform: uppercase;
+        padding: 10px;
+        line-height: 10px;
+        border-radius: 5px;
+        &:hover {
+            background-color: #f2f2f2;
+        }
+        &.disabled {
+            cursor: not-allowed;
+            color: #888;
+        }
+    }
+}
+.Recent-Users {
+    .card-header {
+        position: relative;
+
+        .arrow-wrapper {
+            position: absolute;
+            top: 20px;
+            right: 0;
+
+            a {
+                padding: 20px;
+            }
+        }
+    }
+}
+#controlled-tab-tabpane-name, #controlled-tab-tabpane-team, #controlled-tab-tabpane-role {
+    position: relative;
+    .accordion-toggler {
+        position: absolute;
+        top: -70px;
+        right: -20px;
+    }
+}
+.contact-form {
+    .card {
+        .card-header {
+            position: relative;
+        }
+    }
+}
+.accordion-toggler {
+    position: absolute;
+    top: 20px;
+    right: 10px;
+
+    a {
+        padding: 10px;
+        border-radius: 5px;
+        &:hover {
+            background-color: #f2f2f2;
+        }
+
+        svg {
+            transition: all .3s;
+        }
+
+        &.up {
+            svg {
+                transform: rotate(180deg);
+            }
+        }
+    }
+}
+.accordion-body {
+    transition: height 0.35s ease;
+    
+    &.hide {
+        position: relative;
+        overflow: hidden;
+        height: 0 !important;
+        padding: 0;
+        margin: 0;
+        opacity: 0;
+        visibility: hidden;
     }
 }
