@@ -2,7 +2,6 @@ import React, { Component, Suspense } from 'react';
 import {Route, Switch, Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
 import Fullscreen from "react-full-screen";
-import windowSize from 'react-window-size';
 
 import NavBar from './NavBar';
 import Loader from "../Loader";
@@ -66,7 +65,10 @@ class AdminLayout extends Component {
                                             <Suspense fallback={<Loader/>}>
                                                 <Switch>
                                                     {menu}
-                                                    <Redirect from="/" to={this.props.defaultPath} />
+                                                    {/* <Redirect from="/" to={this.props.defaultPath} /> */}
+                                                    <Route path="/">
+                                                        <Redirect to={this.props.defaultPath} />
+                                                    </Route>
                                                     {/* <Redirect from="/auth/register" to={this.props.defaultPath} /> */}
                                                 </Switch>
                                             </Suspense>
@@ -100,4 +102,4 @@ const mapDispatchToProps = dispatch => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps) (windowSize(AdminLayout));
+export default connect(mapStateToProps, mapDispatchToProps) (AdminLayout);

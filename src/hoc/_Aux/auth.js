@@ -1,17 +1,13 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import { CognitoAuthUserContext } from "../../App/index";
-import { Redirect } from 'react-router-dom';
+import { Route } from 'react-router-dom';
+import AdminLayout from '../../App/layout/AdminLayout';
 
 const AuthAux = (props) => { 
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const user = useContext(CognitoAuthUserContext);
 
-    useEffect(() => {
-        if (user) setIsLoggedIn(true);
-    }, [user]);
-
     return (
-        isLoggedIn ? <Redirect to="/dashboard" /> : props.children
+        user ? <Route path="/" component={AdminLayout} /> : props.children
     ) 
 };
 

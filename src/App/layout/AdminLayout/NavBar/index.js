@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import { NavLink } from 'react-router-dom';
 
 import NavRight from "./NavRight";
 import Aux from "../../../../hoc/_Aux";
@@ -25,9 +26,9 @@ class NavBar extends Component {
                 <header className={headerClass.join(' ')}>
                     <div className="m-header">
                         <a className={toggleClass.join(' ')} id="mobile-collapse1" href={DEMO.BLANK_LINK} onClick={this.props.onToggleNavigation}><span/></a>
-                        <a href={DEMO.BLANK_LINK} className="b-brand">
+                        <NavLink to="/dashboard" className="b-brand">
                             <img src={logo} alt="logo" height="24" />
-                        </a>
+                        </NavLink>
                     </div>
                     <a className="mobile-menu" id="mobile-header" href={DEMO.BLANK_LINK}><i className="feather icon-more-horizontal"/></a>
                     <div className="collapse navbar-collapse">

@@ -5,10 +5,12 @@ window.jQuery = $;
 window.$ = $;
 global.jQuery = $;
 
-const DashboardDefault = React.lazy(() => import('./App/components/Dashboard'));
+const Dashboard = React.lazy(() => import('./App/components/Dashboard'));
+const Profile = React.lazy(() => import('./App/components/Profile'));
 
 const routes = [
-    { path: '/dashboard', exact: true, name: 'Dashboard', component: DashboardDefault },
+    { path: '/dashboard', exact: true, name: 'Dashboard', component: Dashboard },
+    { path: '/profile', exact: true, name: 'Profile', component: Profile },
 ];
 
 export default routes;

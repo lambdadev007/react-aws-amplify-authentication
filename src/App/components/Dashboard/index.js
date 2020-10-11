@@ -348,7 +348,7 @@ const Dashboard = () => {
                 const updatedContacts = allContacts.map((contact) => {
                     if(contact.id === updatedContact.id) return updatedContact;
                     else return contact;
-                })
+                });
         
                 setAllContacts(updatedContacts);
             }
@@ -363,7 +363,7 @@ const Dashboard = () => {
 
     return (
         <Aux>
-            <Breadcrumb />
+            <Breadcrumb name="Dashboard" />
 
             <ToastContainer
                 position="top-right"

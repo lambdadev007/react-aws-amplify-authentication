@@ -1,7 +1,7 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import {Dropdown} from 'react-bootstrap';
+import { NavLink } from 'react-router-dom';
 
-import ChatList from './ChatList';
 import Aux from "../../../../../hoc/_Aux";
 import DEMO from "../../../../../store/constant";
 
@@ -11,11 +11,11 @@ import { Auth } from 'aws-amplify';
 import { CognitoAuthUserContext } from "../../../../index";
 
 const NavRight = props => {
-    const [listOpen, setListOpen] = useState(false);
     const user = useContext(CognitoAuthUserContext);
 
     const logOut = async (event) => {
         event.preventDefault();
+        localStorage.removeItem('token');
         await Auth.signOut();
     }
 
@@ -30,19 +30,30 @@ const NavRight = props => {
                         <Dropdown.Menu alignRight className="profile-notification">
                             <div className="pro-head">
                                 <img src={Avatar1} className="img-radius" alt="User Profile"/>
-                                <span>{user.attributes.given_name} {user.attributes.family_name}</span>
-                                <a href={DEMO.BLANK_LINK} className="dud-logout" onClick={e => logOut(e)} title="Logout">
-                                    <i className="feather icon-log-out"/>
-                                </a>
+                                {
+                                    user ? (
+                                        <>
+                                            <span>{user.attributes.given_name} {user.attributes.family_name}</span>
+                                            <a href={DEMO.BLANK_LINK} className="dud-logout" onClick={e => logOut(e)} title="Logout">
+                                                <i className="feather icon-log-out"/>
+                                            </a>
+                                        </>
+                                    ) : null
+                                }
                             </div>
                             <ul className="pro-body">
-                                <li><a href={DEMO.BLANK_LINK} className="dropdown-item"><i className="feather icon-user"/> Profile</a></li>
+                                <li>
+                                    <NavLink to="/profile" className="dropdown-item">
+                                        <Dropdown.Item as="span">
+                                            <i className="feather icon-user"/> Profile
+                                        </Dropdown.Item>
+                                    </NavLink>
+                                </li>
                             </ul>
                         </Dropdown.Menu>
                     </Dropdown>
                 </li>
             </ul>
-            <ChatList listOpen={listOpen} closed={() => setListOpen(false)} />
         </Aux>
     );
 }

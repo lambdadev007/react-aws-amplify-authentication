@@ -20,6 +20,7 @@ export const CognitoAuthUserContext = createContext(undefined);
 
 const App = props => {
     let [user, setUser] = useState(undefined);
+    let [loaded, setLoaded] = useState(false);
 
     const menu = routes.map((route, index) => {
         return (route.component) ? (
@@ -38,9 +39,22 @@ const App = props => {
         const updateUser = async (authState) => {
             try {
                 const user = await Auth.currentAuthenticatedUser();
-                setUser(user);
+                if(user) {
+                    setUser(user);
+                    setLoaded(true);
+                }
+                else {
+                    setLoaded(true);
+                }
+
+                if(!localStorage.getItem('token')) {
+                    const currentSession = await Auth.currentSession();
+                    const userToken = currentSession.getAccessToken().getJwtToken();
+                    localStorage.setItem('token', userToken);
+                }
             } catch (error) {
                 setUser(undefined);
+                setLoaded(true);
             }
         };
         Hub.listen('auth', updateUser); // listen for login/signup events
@@ -48,6 +62,10 @@ const App = props => {
         updateUser(); // check manually the first time because we won't get a Hub event
         return () => Hub.remove('auth', updateUser); // cleanup
     }, []);
+
+    if(!loaded) {
+        return <div style={{width: '100%', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>Loading...</div>
+    }
 
     return (
         <CognitoAuthUserContext.Provider value={user}>

@@ -12,7 +12,7 @@ const Breadcrumb = props => {
                     <div className="col-md-12">
                         <ul className="breadcrumb">
                             <li className="breadcrumb-item"><Home size="15" color="black" /></li>
-                            <li className="breadcrumb-item">Dashboard</li>
+                            <li className="breadcrumb-item">{props.name}</li>
                         </ul>
                     </div>
                 </div>

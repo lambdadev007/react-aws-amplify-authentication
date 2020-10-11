@@ -11,10 +11,17 @@ body {
         padding-top: 30px;
     }
 }
+.global-loader {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 .pcoded-header {
     z-index: 1028;
-    position: relative;
-    display: flex;
+    position: relative !important;
+    display: flex !important;
     min-height: 70px;
     padding-right: 15px;
     padding-left: 15px;
@@ -22,15 +29,36 @@ body {
     top: 0;
     background: transparent;
     color: #3f4d67;
-    width: unset;
-    margin-left: auto;
+    width: unset !important;
+    margin-left: auto !important;
 
     .m-header {
-        display: block;
+        display: block !important;
     }
 }
 .pcoded-header .dropdown.show:before {
     left: -20px;
+    top: 61px;
+}
+.pro-body li {
+    &:hover {
+        .dropdown-item {
+            background-color: #fff;
+        
+            &:hover {
+                background-color: rgba(4, 169, 245, 0.1) !important;
+            }
+        }
+    }
+}
+.pro-body li:hover .dropdown-item:hover {
+    background-color: transparent !important;
+}
+.dropdown-item {
+    background-color: transparent !important;
+}
+span.dropdown-item {
+    padding: 0;
 }
 .nav-tabs {
     .nav-item {
