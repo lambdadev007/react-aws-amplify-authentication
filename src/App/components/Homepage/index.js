@@ -77,8 +77,8 @@ const HomePage = () => {
                                 contentLabel="Example Modal"
                                 >
                                     <iframe
-                                     width="460" 
-                                     height="230" 
+                                     width="800" 
+                                     height="400" 
                                      src={videoUrl} 
                                      frameBorder="0" 
                                      allowFullScreen="" 
