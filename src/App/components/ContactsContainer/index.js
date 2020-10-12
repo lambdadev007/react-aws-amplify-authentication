@@ -21,7 +21,7 @@ const ContactsContainer = props => {
         return (
             <div className="card Recent-Users" key={contacts[0]}>
                 <div className="card-header" id={`contact-${contacts[0]}`}>
-                    <h5 style={{textTransform: "uppercase"}}>{contacts[0]}</h5>
+                    <h5 style={{textTransform: "capitalize"}}>{contacts[0]}</h5>
 
                     <div className="arrow-wrapper">
                         <NavLink to="#" onClick={() => { window.scrollTo(0, 0); }}>

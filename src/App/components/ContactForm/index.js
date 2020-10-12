@@ -1,6 +1,5 @@
 import React, { useEffect, useState, forwardRef } from 'react';
-import { UserPlus, ChevronDown } from 'react-feather';
-import { NavLink } from 'react-router-dom';
+import { UserPlus } from 'react-feather';
 
 
 const ContactForm = (props, ref) => {
@@ -14,14 +13,8 @@ const ContactForm = (props, ref) => {
         <div>
             <div className="page-wrapper contact-form">
                 <div className="card">
-                    <div className="card-header">
+                    <div className="card-header"  onClick={() => { setBodyShow(!bodyShow) }}>
                         <h5>{props.title}</h5>
-
-                        <div className="accordion-toggler">
-                            <NavLink to="#" className={`${bodyShow ? 'down' : 'up'}`} onClick={() => { setBodyShow(!bodyShow) }}>
-                                <ChevronDown />
-                            </NavLink>
-                        </div>
                     </div>
                     <div className={`card-body accordion-body ${bodyShow ? 'show' : 'hide'}`} id="accordion-body-1">
                         <form onSubmit={props.formType === 'create' ? props.handleCreateRecord : props.handleUpdateRecord}>

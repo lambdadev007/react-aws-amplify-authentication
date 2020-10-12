@@ -91,7 +91,7 @@ const Profile = () => {
 
     useEffect(() => {
         if(user)
-            setName(`${user.attributes.given_name} ${user.attributes.family_name}`)
+            setName(`${user.attributes.given_name ? user.attributes.given_name : ''} ${user.attributes.family_name ? user.attributes.family_name : ''}`)
     }, [user]);
 
     return (

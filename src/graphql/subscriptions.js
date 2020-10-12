@@ -2,8 +2,8 @@
 // this is an auto generated file. This will be overwritten
 
 export const onCreateContacts = /* GraphQL */ `
-  subscription OnCreateContacts {
-    onCreateContacts {
+  subscription OnCreateContacts($owner: String!) {
+    onCreateContacts(owner: $owner) {
       id
       Name
       TeamName
@@ -19,8 +19,8 @@ export const onCreateContacts = /* GraphQL */ `
   }
 `;
 export const onUpdateContacts = /* GraphQL */ `
-  subscription OnUpdateContacts {
-    onUpdateContacts {
+  subscription OnUpdateContacts($owner: String!) {
+    onUpdateContacts(owner: $owner) {
       id
       Name
       TeamName
@@ -36,8 +36,8 @@ export const onUpdateContacts = /* GraphQL */ `
   }
 `;
 export const onDeleteContacts = /* GraphQL */ `
-  subscription OnDeleteContacts {
-    onDeleteContacts {
+  subscription OnDeleteContacts($owner: String!) {
+    onDeleteContacts(owner: $owner) {
       id
       Name
       TeamName

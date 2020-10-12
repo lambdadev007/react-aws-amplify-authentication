@@ -16,35 +16,40 @@ const TeamsContainer = props => {
         </div>  
     )
 
-    return props.allTeams.map((teams) => {
+    return props.allTeams.map((contacts) => {
         return (
-            <div className="card Recent-Users" key={teams[0]}>
-                <div className="card-header" id={`team-${teams[0]}`}>
-                    <h5 style={{textTransform: "uppercase"}}>{teams[0]}</h5>
+            contacts[1].length > 0 && contacts[1][0] !== '' ? (
+                <div className="card Recent-Users" key={contacts[0]}>
+                    <div className="card-header" id={`team-${contacts[0]}`}>
+                        <h5 style={{textTransform: "uppercase"}}>{contacts[0]}</h5>
 
-                    <div className="arrow-wrapper">
-                        <NavLink to="#" onClick={() => { window.scrollTo(0, 0); }}>
-                            <ArrowUp />
-                        </NavLink>
+                        <div className="arrow-wrapper">
+                            <NavLink to="#" onClick={() => { window.scrollTo(0, 0); }}>
+                                <ArrowUp />
+                            </NavLink>
+                        </div>
+                    </div>
+                    <div className="card-block px-0 py-3">
+                        <div className="table-responsive px-4">
+                            <table className="table table-hover mb-0">
+                                <tbody>
+                                    {
+                                        contacts[1].map((contact, index) =>
+                                            <Team
+                                                key={contact.id}
+                                                contact={contact}
+                                                onEditRequest={props.onEditRequest}
+                                                allContacts={props.allContacts}
+                                                handleDeleteContact={props.handleDeleteContact}
+                                            />
+                                        )
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-                <div className="card-block px-0 py-3">
-                    <div className="table-responsive px-4">
-                        <table className="table table-hover mb-0">
-                            <tbody>
-                                {
-                                    teams[1].map((team, index) =>
-                                        <Team
-                                            key={index}
-                                            team={team}
-                                        />
-                                    )
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+            ) : null
         );
     });
 };

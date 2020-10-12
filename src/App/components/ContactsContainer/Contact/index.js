@@ -10,24 +10,24 @@ const Contact = props => {
 
     return (
         <tr className="unread" key={props.contact.id}>
-            <td>
+            <td width="15%">
                 {props.contact.Gender === 'Female' ?
                     <img className="rounded-circle" style={{ width: '40px' }} src={Female} alt="activity-user" />
                     :
                     <img className="rounded-circle" style={{ width: '40px' }} src={Male} alt="activity-user" />
                 }
             </td>
-            <td>
+            <td width="35%">
                 <h6 className="mb-1">{//<SpeakIt nameToAudio={contact.Name} />}{' '}
                 }
                     {props.contact.Name}</h6>
                 <p className="m-0">{props.contact.TeamName} | {props.contact.Role}</p>
             </td>
-            <td>
+            <td width="35%">
                 <h6 className="mb-1"><Mail color="orange" size="15" />{' '}{props.contact.Email}</h6>
                 <p className="m-0"><Smartphone color="orange" size="15" />{' '}{props.contact.Phone}</p>
             </td>
-            <td className="d-flex justify-content-end">
+            <td width="15%">
                 {
                     user.attributes.sub === props.contact.owner ? (
                         <>

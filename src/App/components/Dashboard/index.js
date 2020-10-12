@@ -46,15 +46,9 @@ const Dashboard = () => {
     const [bodyShow, setBodyShow] = useState(true);
     const [tabKey, setTabKey] = useState('name');
     const nameRef = useRef();
-    const alphabet = [
-        '1', '2', '3', '4', '5', '6', '7', '8', '9', '!', '"', 
-        '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', 
-        '.', '/', ':', ';', '=', '?', '@', '[', '\\', ']', '^', 
-        '_', '`', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 
+    const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 
         'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 
-        'u', 'v', 'w', 'x', 'y', 'z', '{', '|', '}', '~', '¢', 
-        '£', '¥', '©', '®', '°', '¶', '×', '÷', 'Π', '•', '€', 
-        '™', '∆', '√', '✓'
+        'u', 'v', 'w', 'x', 'y', 'z', 'non-alphabet'
     ];
     const user = useContext(CognitoAuthUserContext);
 
@@ -108,42 +102,34 @@ const Dashboard = () => {
         }
     }
 
-    const groupContacts = (contacts) => {
+    const groupContacts = (contacts, key) => {
         let groupedContacts = [];
         const filteredContacts = contacts.sort((a, b) => {
-            const m = a.Name.toLowerCase();
-            const n = b.Name.toLowerCase();
+            const m = a[key].toLowerCase();
+            const n = b[key].toLowerCase();
             return (m < n) ? -1 : (m > n) ? 1 : 0;
         });
+
+        let pattern = /[a-z]/i;
+        groupedContacts['non-alphabet'] = [];
 
         for(let i = 0; i < filteredContacts.length; i++){//loop throug collection         
-            var firstLetter = filteredContacts[i].Name.charAt(0).toLowerCase();
-            if(groupedContacts[firstLetter] === undefined){             
-                groupedContacts[firstLetter] = [];         
-            }         
-            groupedContacts[firstLetter].push(filteredContacts[i]);     
+            var firstLetter = filteredContacts[i][key].charAt(0).toLowerCase();
+            if(groupedContacts[firstLetter] === undefined && pattern.test(firstLetter)){             
+                groupedContacts[firstLetter] = [];
+                groupedContacts[firstLetter].push(filteredContacts[i]);
+            }
+            else if(groupedContacts[firstLetter] !== undefined && pattern.test(firstLetter)) {
+                groupedContacts[firstLetter].push(filteredContacts[i]);
+            }
+            else if(groupedContacts[firstLetter] === undefined && !pattern.test(firstLetter))
+                groupedContacts['non-alphabet'].push(filteredContacts[i]);
         }
-
+        if(groupedContacts['non-alphabet'].length === 0) {
+            delete groupedContacts['non-alphabet'];
+        }
+        console.log('[groupedContacts]', groupedContacts);
         return Object.entries(groupedContacts);
-    }
-
-    const groupTeamsOrRoles = (teams) => {
-        let groupedTeams = [];
-        const filteredTeams = teams.sort((a, b) => {
-            const m = a.toLowerCase();
-            const n = b.toLowerCase();
-            return (m < n) ? -1 : (m > n) ? 1 : 0;
-        });
-
-        for(let i = 0; i < filteredTeams.length; i++){//loop throug collection         
-            var firstLetter = filteredTeams[i].charAt(0).toLowerCase();
-            if(groupedTeams[firstLetter] === undefined){             
-                groupedTeams[firstLetter] = [];         
-            }         
-            groupedTeams[firstLetter].push(filteredTeams[i]);     
-        }
-        console.log('[groupTeamsOrRoles]', Object.entries(groupedTeams));
-        return Object.entries(groupedTeams);
     }
 
     const getAllContacts = async () => {
@@ -235,24 +221,10 @@ const Dashboard = () => {
 
     const tabSelectHandler = (key) => {
         if (key === 'team') {
-            let temp = allContacts.map((contact) => {
-                return contact.TeamName
-            });
-            temp = temp.filter((value, index, self) => {
-                return self.indexOf(value) === index; // get unique team names
-            });
-
-            setAllTeams(groupTeamsOrRoles(temp));
+            setAllTeams(groupContacts(allContacts, 'TeamName'));
         }
         else if (key === 'role') {
-            let temp = allContacts.map((contact) => {
-                return contact.Role
-            });
-            temp = temp.filter((value, index, self) => {
-                return self.indexOf(value) === index; // get unique team names
-            });
-
-            setAllRoles(groupTeamsOrRoles(temp));
+            setAllRoles(groupContacts(allContacts, 'Role'));
         }
         setTabKey(key);
     }
@@ -290,7 +262,7 @@ const Dashboard = () => {
     useEffect(() => {
         console.log('[allContacts]', allContacts);
         if(allContacts)
-            setContactGroups(groupContacts(allContacts));
+            setContactGroups(groupContacts(allContacts, 'Name'));
     }, [allContacts]);
 
     useEffect(() => {
@@ -438,7 +410,11 @@ const Dashboard = () => {
                             }
                         </div>
 
-                        <TeamsContainer allTeams={allTeams} />
+                        <TeamsContainer
+                         allTeams={allTeams}
+                         onEditRequest={editRequestHandler} 
+                         handleDeleteContact={handleDeleteContact}
+                        />
                     </div>
                 </Tab>
                 <Tab eventKey="role" title="ROLE">
@@ -462,7 +438,11 @@ const Dashboard = () => {
                             }
                         </div>
 
-                        <RolesContainer allRoles={allRoles} />
+                        <RolesContainer
+                         allRoles={allRoles}
+                         onEditRequest={editRequestHandler} 
+                         handleDeleteContact={handleDeleteContact}
+                        />
                     </div>
                 </Tab>
             </Tabs>

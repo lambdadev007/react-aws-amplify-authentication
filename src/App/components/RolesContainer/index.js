@@ -16,35 +16,40 @@ const RolesContainer = props => {
         </div>  
     )
 
-    return props.allRoles.map((roles) => {
+    return props.allRoles.map((contacts) => {
         return (
-            <div className="card Recent-Users" key={roles[0]}>
-                <div className="card-header" id={`role-${roles[0]}`}>
-                    <h5 style={{textTransform: "uppercase"}}>{roles[0]}</h5>
+            contacts[1].length > 0 ? (
+                <div className="card Recent-Users" key={contacts[0]}>
+                    <div className="card-header" id={`role-${contacts[0]}`}>
+                        <h5 style={{textTransform: "uppercase"}}>{contacts[0]}</h5>
 
-                    <div className="arrow-wrapper">
-                        <NavLink to="#" onClick={() => { window.scrollTo(0, 0); }}>
-                            <ArrowUp />
-                        </NavLink>
+                        <div className="arrow-wrapper">
+                            <NavLink to="#" onClick={() => { window.scrollTo(0, 0); }}>
+                                <ArrowUp />
+                            </NavLink>
+                        </div>
+                    </div>
+                    <div className="card-block px-0 py-3">
+                        <div className="table-responsive px-4">
+                            <table className="table table-hover mb-0">
+                                <tbody>
+                                    {
+                                        contacts[1].map((contact, index) =>
+                                            <Role
+                                                key={contact.id}
+                                                contact={contact}
+                                                onEditRequest={props.onEditRequest}
+                                                allContacts={props.allContacts}
+                                                handleDeleteContact={props.handleDeleteContact}
+                                            />
+                                        )
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-                <div className="card-block px-0 py-3">
-                    <div className="table-responsive px-4">
-                        <table className="table table-hover mb-0">
-                            <tbody>
-                                {
-                                    roles[1].map((role, index) =>
-                                        <Role
-                                            key={index}
-                                            role={role}
-                                        />
-                                    )
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+            ) : null
         );
     });
 };

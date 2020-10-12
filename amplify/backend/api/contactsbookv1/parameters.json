@@ -1,10 +1,10 @@
 {
-    "AppSyncApiName": "contactsbookv12",
+    "AppSyncApiName": "contactsbookv1",
     "DynamoDBBillingMode": "PAY_PER_REQUEST",
     "DynamoDBEnableServerSideEncryption": false,
     "AuthCognitoUserPoolId": {
         "Fn::GetAtt": [
-            "authcontactsbookv12d47ae70b",
+            "authcontactsbookv1f1852ff6",
             "Outputs.UserPoolId"
         ]
     }
